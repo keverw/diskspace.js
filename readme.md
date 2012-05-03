@@ -10,11 +10,13 @@ To set up diskspace.js on your Node.js server use npm.
     npm install diskspace
 
 ## Example Usage ##
-    var diskspace = require('diskspace');
-    diskspace.check('C', function (total, free, status)
-    {
-        Your code here
-    });
+```
+var diskspace = require('diskspace');
+diskspace.check('C', function (total, free, status)
+{
+	Your code here
+});
+```
 
 On Windows you change C to the drive letter you want to check. On Linux you use the mount path eg `/`.
 
