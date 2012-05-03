@@ -24,7 +24,7 @@ On Windows you change C to the drive letter you want to check. On Linux you use 
 
 ## Status codes: ##
 
-- NOTFOUND - Disk was not found, the space values will be 0
-- READY - The drive is ready
-- NOTREADY - The drive isn't ready, the space values will be 0
-- STDERR - some error, the output of it was logged to the console. 
+- `NOTFOUND` - Disk was not found, the space values will be 0
+- `READY` - The drive is ready
+- `NOTREADY` - The drive isn't ready, the space values will be 0
+- `STDERR` - some error, the output of it was logged to the console. 
