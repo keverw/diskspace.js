@@ -3,13 +3,13 @@ This is a simple module for Node.js to check disk space usages in bytes.
 
 This also depends on a console application for Windows called [DriveSpace](https://github.com/keverw/drivespace) written in C# and requires .NET Framework 3.5 when using this on a Windows system. This included in the NPM package, but you can look at the DriveSpace code also if you wish.
 
-# Setup
+## Setup ##
 
 To set up diskspace.js on your Node.js server use npm.
 
     npm install diskspace
 
-## Example Usage##
+## Example Usage ##
     var diskspace = require('diskspace');
     diskspace.check('C', function (total, free, status)
     {
