@@ -36,12 +36,19 @@
 				var exec = require('child_process').exec;
 				exec("df -k  " + drive, function(error, stdout, stderr)
 				{
-					console.log(stdout);
 					if (error)
 					{
-						status = 'STDERR';
-						console.log(stderr);
-						callback(total, free, status);
+						if (stderr.indexOf("No such file or directory") != -1)
+						{
+							status = 'NOTFOUND';
+							callback(total, free, status);
+						}
+						else
+						{
+							status = 'STDERR';
+							console.log(stderr);
+							callback(total, free, status);
+						}
 					}
 					else
 					{

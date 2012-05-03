@@ -1,5 +1,6 @@
 var diskspace = require('./diskspace.js'); //use just diskspace if installed via NPM
 var os = require('os');
+var drive_letter = null;
 
 if (os.type() == 'Windows_NT')
 {
