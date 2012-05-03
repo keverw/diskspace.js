@@ -3,7 +3,7 @@ This is a simple module for Node.js to check disk space usages in bytes.
 
 This also depends on a console application for Windows called [DriveSpace](https://github.com/keverw/drivespace) written in C# and requires .NET Framework 3.5 when using this on a Windows system. This included in the NPM package, but you can look at the DriveSpace code also if you wish.
 
-## Setup ##
+# Setup
 
 To set up diskspace.js on your Node.js server use npm.
 
@@ -17,7 +17,6 @@ diskspace.check('C', function (total, free, status)
 	Your code here
 });
 ```
-
 On Windows you change C to the drive letter you want to check. On Linux you use the mount path eg `/`.
 
 `total` is how much the drive has totally.
@@ -26,7 +25,10 @@ On Windows you change C to the drive letter you want to check. On Linux you use 
 
 ## Status codes: ##
 
-- `NOTFOUND` - Disk was not found, the space values will be 0
-- `READY` - The drive is ready
-- `NOTREADY` - The drive isn't ready, the space values will be 0
-- `STDERR` - some error, the output of it was logged to the console. 
+- NOTFOUND - Disk was not found, the space values will be 0
+- READY - The drive is ready
+- NOTREADY - The drive isn't ready, the space values will be 0
+- STDERR - some error, the output of it was logged to the console.
+
+##Other Notes##
+This will fail on hard drives bigger than 9 petabytes. Thanks [@SteveStreza](https://twitter.com/#!/SteveStreza) [[1]](https://twitter.com/#!/SteveStreza/status/197939419842482176) [[2]](https://twitter.com/#!/SteveStreza/status/197939715993907200)
