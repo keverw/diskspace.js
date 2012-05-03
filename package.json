@@ -2,7 +2,7 @@
   "author": "Kevin Whitman (https://github.com/keverw)",
   "name": "diskspace",
   "description": "A simple diskspace checker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/keverw/diskspace.js"
