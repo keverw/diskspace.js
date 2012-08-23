@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/keverw/diskspace.js.png)](http://travis-ci.org/keverw/diskspace.js)
 # diskspace.js #
 This is a simple module for Node.js to check disk space usages in bytes.
 
