@@ -52,9 +52,9 @@
 					}
 					else
 					{
-						var lines = stdout.split("\n");
+						var lines = stdout.trim().split("\n");
 						
-						var str_disk_info = lines[1].replace( /[\s\n\r]+/g,' ');
+						var str_disk_info = lines[lines.length - 1].replace( /[\s\n\r]+/g,' ');
 						var disk_info = str_disk_info.split(' ');
 						
 						total = disk_info[1] * 1024;
