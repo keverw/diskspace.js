@@ -39,7 +39,7 @@ var child_process = require('child_process');
 		}
 		else
 		{
-			child_process.exec("df -k  " + drive, function(error, stdout, stderr)
+			child_process.exec("df -k '" + drive.replace(/'/g,"'\\''") + "'", function(error, stdout, stderr)
 			{
 				if (error)
 				{
