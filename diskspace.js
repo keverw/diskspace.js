@@ -1,7 +1,10 @@
+'use strict';
+var os = require('os');
+var child_process = require('child_process');
+
 (function() {
 	function check(drive, callback)
 	{
-		var os = require('os');
 		var total = 0;
 		var free = 0;
 		var status = null;
@@ -10,8 +13,7 @@
 		{
 			if (os.type() == 'Windows_NT') //Windows
 			{
-				var exec = require('child_process').exec;
-				exec('"' + __dirname + '\\drivespace.exe" drive-' + drive, function(error, stdout, stderr)
+				child_process.exec('"' + __dirname + '\\drivespace.exe" drive-' + drive, function(error, stdout, stderr)
 				{
 					if (error)
 					{
@@ -33,8 +35,7 @@
 			}
 			else if (os.type() == 'Darwin' || os.type() == 'Linux') //Mac OS or Linux
 			{
-				var exec = require('child_process').exec;
-				exec("df -k  " + drive, function(error, stdout, stderr)
+				child_process.exec("df -k  " + drive, function(error, stdout, stderr)
 				{
 					if (error)
 					{
