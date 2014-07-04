@@ -16,6 +16,8 @@ function check(drive, callback)
 
 	if (os.type() == 'Windows_NT') //Windows
 	{
+		if(drive.length <= 3)
+			drive = drive.charAt(0);
 		child_process.exec('"' + __dirname + '\\drivespace.exe" drive-' + drive, function(error, stdout, stderr)
 		{
 			if (error)
@@ -64,6 +66,9 @@ function check(drive, callback)
 				total = disk_info[1] * 1024;
 				free = disk_info[3] * 1024;
 				status = 'READY';
+				if(disk_info[5] != drive.replace(/'/g,"'\\''")){ //if not mount point
+					free = total = 0;
+				}
 
 				callback(total, free, status);
 			}
