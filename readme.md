@@ -13,7 +13,7 @@ To set up diskspace.js on your Node.js server use npm.
 ## Example Usage ##
 ```
 var diskspace = require('diskspace');
-diskspace.check('C', function (total, free, status)
+diskspace.check('C', function (err, total, free, status)
 {
 	Your code here
 });
