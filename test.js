@@ -17,6 +17,7 @@ else
 
 diskspace.check(drive_letter, function (err, total, free, status)
 {
+    console.log('err: ' + err);
 	console.log('Total: ' + total);
 	console.log('Free: ' + free);
 	console.log('Status: ' + status);
