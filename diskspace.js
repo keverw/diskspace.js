@@ -26,18 +26,22 @@ function check(drive, callback)
 			if (error)
 			{
 				status = 'STDERR';
-				callback ? callback(error, total, free, status)
-						 : console.error(stderr);
 			}
 			else
 			{
-				var disk_info = stdout.split(',');
+				var disk_info = stdout.trim().split(',');
 
 				total = disk_info[0];
 				free = disk_info[1];
 				status = disk_info[2];
 
-				callback && callback(null, total, free, status);
+				if (status == 'NOTFOUND')
+				{
+					error = new Error('Drive not found');
+				}
+
+				callback ? callback(error, total, free, status)
+						 : console.error(stderr);
 			}
 		});
 	}
