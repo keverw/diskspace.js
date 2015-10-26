@@ -1,6 +1,7 @@
 'use strict';
 var os = require('os');
 var child_process = require('child_process');
+var path = require('path');
 
 function check(drive, callback)
 {
@@ -11,30 +12,40 @@ function check(drive, callback)
 	if (!drive)
 	{
 		status = 'NOTFOUND';
-		return callback(total, free, status);
+		var error = new Error('Necessary parameter absent');
+
+		return callback
+					? callback(error, total, free, status)
+					: console.error(error);
 	}
 
 	if (os.type() == 'Windows_NT') //Windows
 	{
+	
 		if(drive.length <= 3)
 			drive = drive.charAt(0);
+			
 		child_process.exec('"' + __dirname + '\\drivespace.exe" drive-' + drive, function(error, stdout, stderr)
 		{
 			if (error)
 			{
 				status = 'STDERR';
-				console.log(stderr);
-				callback(total, free, status);
 			}
 			else
 			{
-				var disk_info = stdout.split(',');
+				var disk_info = stdout.trim().split(',');
 
 				total = disk_info[0];
 				free = disk_info[1];
 				status = disk_info[2];
 
-				callback(total, free, status);
+				if (status == 'NOTFOUND')
+				{
+					error = new Error('Drive not found');
+				}
+
+				callback ? callback(error, total, free, status)
+						 : console.error(stderr);
 			}
 		});
 	}
@@ -47,14 +58,13 @@ function check(drive, callback)
 				if (stderr.indexOf("No such file or directory") != -1)
 				{
 					status = 'NOTFOUND';
-					callback(total, free, status);
 				}
 				else
 				{
 					status = 'STDERR';
-					console.log(stderr);
-					callback(total, free, status);
 				}
+				callback ? callback(error, total, free, status)
+						 : console.error(stderr);
 			}
 			else
 			{
@@ -70,7 +80,7 @@ function check(drive, callback)
 					free = total = 0;
 				}
 
-				callback(total, free, status);
+				callback && callback(null, total, free, status);
 			}
 		});
 	}
