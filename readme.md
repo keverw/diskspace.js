@@ -1,14 +1,16 @@
 [![build status](https://secure.travis-ci.org/keverw/diskspace.js.png)](http://travis-ci.org/keverw/diskspace.js)
 # diskspace.js #
-This is a simple module for Node.js to check disk space usages in bytes.
+This is a simple module for Node.js to check disk space usages in bytes on both *nix and Windows systems.
 
-This also depends on a console application for Windows called [DriveSpace](https://github.com/keverw/drivespace) written in C# and requires .NET Framework 3.5 when using this on a Windows system. This included in the NPM package, but you can look at the DriveSpace code also if you wish.
+If you are using on Windows, This also depends on a console application for Windows called [DriveSpace](https://github.com/keverw/drivespace) written in C# and requires .NET Framework 3.5 when using this on a Windows system. This included in the NPM package, but you can look at the DriveSpace code also if you wish.
+
+If your on a *nix system, `drivespace.exe` is not used.
 
 ## Setup ##
 
 To set up diskspace.js on your Node.js server use npm.
 
-    npm install diskspace
+`npm install diskspace`
 
 ## Example Usage ##
 ```
