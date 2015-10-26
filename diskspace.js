@@ -1,6 +1,6 @@
 'use strict';
-var os = require('os');
-var child_process = require('child_process');
+var osType = require('os').type();
+var exec = require('child_process').exec;
 var path = require('path');
 
 function check(drive, callback)
@@ -19,13 +19,13 @@ function check(drive, callback)
 					: console.error(error);
 	}
 
-	if (os.type() == 'Windows_NT') //Windows
+	if (osType === 'Windows_NT') //Windows
 	{
-	
+		
 		if(drive.length <= 3)
 			drive = drive.charAt(0);
 			
-		child_process.exec('"' + __dirname + '\\drivespace.exe" drive-' + drive, function(error, stdout, stderr)
+		exec(path.join(__dirname, 'drivespace.exe') + ' drive-' + drive, function(error, stdout, stderr)
 		{
 			if (error)
 			{
@@ -39,7 +39,7 @@ function check(drive, callback)
 				free = disk_info[1];
 				status = disk_info[2];
 
-				if (status == 'NOTFOUND')
+				if (status === 'NOTFOUND')
 				{
 					error = new Error('Drive not found');
 				}
@@ -51,7 +51,7 @@ function check(drive, callback)
 	}
 	else
 	{
-		child_process.exec("df -k '" + drive.replace(/'/g,"'\\''") + "'", function(error, stdout, stderr)
+		exec("df -k '" + drive.replace(/'/g,"'\\''") + "'", function(error, stdout, stderr)
 		{
 			if (error)
 			{
