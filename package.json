@@ -2,7 +2,7 @@
   "author": "Kevin Whitman (https://github.com/keverw)",
   "name": "diskspace",
   "description": "A simple disk space checker module. Check out the GitHub page for more details.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "contributors": [
     "Kornel Lesiński <kornel@geekhood.net>"
   ],

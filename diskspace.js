@@ -44,9 +44,10 @@ function check(drive, callback)
 					error = new Error('Drive not found');
 				}
 
-				callback ? callback(error, total, free, status)
-						 : console.error(stderr);
 			}
+
+			callback ? callback(error, total, free, status)
+						 : console.error(stderr);
 		});
 	}
 	else
@@ -63,6 +64,7 @@ function check(drive, callback)
 				{
 					status = 'STDERR';
 				}
+				
 				callback ? callback(error, total, free, status)
 						 : console.error(stderr);
 			}
