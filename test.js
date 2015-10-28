@@ -4,7 +4,8 @@ var drive_letter = null;
 
 if (os.type() == 'Windows_NT')
 {
-	drive_letter = 'C';
+	drive_letter = 'C'; //Good Mount Point
+	//drive_letter = 'K'; //Bad Mount Point - Well on my system
 }
 else if (os.type() == 'Darwin' || os.type() == 'Linux') //Mac OS or Linux
 {
