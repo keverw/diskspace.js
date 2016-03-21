@@ -1,6 +1,7 @@
 'use strict';
 var osType = require('os').type();
 var exec = require('child_process').exec;
+var execFile = require('child_process').execFile;
 var path = require('path');
 
 function check(drive, callback)
@@ -21,11 +22,11 @@ function check(drive, callback)
 
 	if (osType === 'Windows_NT') //Windows
 	{
-		
+
 		if(drive.length <= 3)
 			drive = drive.charAt(0);
-			
-		exec(path.join(__dirname, 'drivespace.exe') + ' drive-' + drive, function(error, stdout, stderr)
+
+		execFile(path.join(__dirname, 'drivespace.exe'),["drive-"+ drive], function (error, stdout, stderr)
 		{
 			if (error)
 			{
@@ -64,7 +65,7 @@ function check(drive, callback)
 				{
 					status = 'STDERR';
 				}
-				
+
 				callback ? callback(error, total, free, status)
 						 : console.error(stderr);
 			}
