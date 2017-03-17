@@ -16,10 +16,11 @@ else
 	drive_letter = null;
 }
 
-diskspace.check(drive_letter, function (err, total, free, status)
+diskspace.check(drive_letter, function (err, result)
 {
-    console.log('err: ' + err);
-	console.log('Total: ' + total);
-	console.log('Free: ' + free);
-	console.log('Status: ' + status);
+    console.log('err: ' + result.err);
+	console.log('Total: ' + result.total);
+	console.log('Used: ' + result.used);
+	console.log('Free: ' + result.free);
+	console.log('Status: ' + result.status);
 });
