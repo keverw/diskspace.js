@@ -40,9 +40,10 @@ function check(drive, callback)
 
 				result.total = disk_info[0];
 				result.free = disk_info[1];
+				result.used = result.total - result.free;
 				result.status = disk_info[2];
 
-				if (status === 'NOTFOUND')
+				if (result.status === 'NOTFOUND')
 				{
 					error = new Error('Drive not found');
 				}
