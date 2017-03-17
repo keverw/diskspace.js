@@ -6,18 +6,19 @@ var path = require('path');
 
 function check(drive, callback)
 {
-	var total = 0;
-	var used = 0;
-	var free = 0;
-	var status = null;
+	var result = {};
+	result.total = 0;
+	result.used = 0;
+	result.free = 0;
+	result.status = null;
 
 	if (!drive)
 	{
-		status = 'NOTFOUND';
+		result.status = 'NOTFOUND';
 		var error = new Error('Necessary parameter absent');
 
 		return callback
-					? callback(error, total, used, free, status)
+					? callback(error, result)
 					: console.error(error);
 	}
 
@@ -31,15 +32,15 @@ function check(drive, callback)
 		{
 			if (error)
 			{
-				status = 'STDERR';
+				result.status = 'STDERR';
 			}
 			else
 			{
 				var disk_info = stdout.trim().split(',');
 
-				total = disk_info[0];
-				free = disk_info[1];
-				status = disk_info[2];
+				result.total = disk_info[0];
+				result.free = disk_info[1];
+				result.status = disk_info[2];
 
 				if (status === 'NOTFOUND')
 				{
@@ -48,7 +49,7 @@ function check(drive, callback)
 
 			}
 
-			callback ? callback(error, total, used, free, status)
+			callback ? callback(error, result)
 						 : console.error(stderr);
 		});
 	}
@@ -60,14 +61,14 @@ function check(drive, callback)
 			{
 				if (stderr.indexOf("No such file or directory") != -1)
 				{
-					status = 'NOTFOUND';
+					result.status = 'NOTFOUND';
 				}
 				else
 				{
-					status = 'STDERR';
+					result.status = 'STDERR';
 				}
 
-				callback ? callback(error, total, used, free, status)
+				callback ? callback(error, result)
 						 : console.error(stderr);
 			}
 			else
@@ -77,12 +78,12 @@ function check(drive, callback)
 				var str_disk_info = lines[lines.length - 1].replace( /[\s\n\r]+/g,' ');
 				var disk_info = str_disk_info.split(' ');
 
-				total = disk_info[1] * 1024;
-				used = disk_info[2] * 1024;
-				free = disk_info[3] * 1024;
-				status = 'READY';
+				result.total = disk_info[1] * 1024;
+				result.used = disk_info[2] * 1024;
+				result.free = disk_info[3] * 1024;
+				result.status = 'READY';
 
-				callback && callback(null, total, used, free, status);
+				callback && callback(null, result);
 			}
 		});
 	}
