@@ -7,6 +7,7 @@ var path = require('path');
 function check(drive, callback)
 {
 	var total = 0;
+	var used = 0;
 	var free = 0;
 	var status = null;
 
@@ -16,7 +17,7 @@ function check(drive, callback)
 		var error = new Error('Necessary parameter absent');
 
 		return callback
-					? callback(error, total, free, status)
+					? callback(error, total, used, free, status)
 					: console.error(error);
 	}
 
@@ -47,7 +48,7 @@ function check(drive, callback)
 
 			}
 
-			callback ? callback(error, total, free, status)
+			callback ? callback(error, total, used, free, status)
 						 : console.error(stderr);
 		});
 	}
@@ -66,7 +67,7 @@ function check(drive, callback)
 					status = 'STDERR';
 				}
 
-				callback ? callback(error, total, free, status)
+				callback ? callback(error, total, used, free, status)
 						 : console.error(stderr);
 			}
 			else
@@ -77,10 +78,11 @@ function check(drive, callback)
 				var disk_info = str_disk_info.split(' ');
 
 				total = disk_info[1] * 1024;
+				used = disk_info[2] * 1024;
 				free = disk_info[3] * 1024;
 				status = 'READY';
 
-				callback && callback(null, total, free, status);
+				callback && callback(null, total, used, free, status);
 			}
 		});
 	}
