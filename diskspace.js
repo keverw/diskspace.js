@@ -56,7 +56,7 @@ function check(drive, callback)
 	}
 	else
 	{
-		exec("df -k '" + drive.replace(/'/g,"'\\''") + "'", function(error, stdout, stderr)
+		exec("df -k | grep '" + drive.replace(/'/g,"'\\''") + "'", function(error, stdout, stderr)
 		{
 			if (error)
 			{
