@@ -1,96 +1,96 @@
 'use strict';
-var osType = require('os').type();
-var exec = require('child_process').exec;
-var execFile = require('child_process').execFile;
-var path = require('path');
+const osType = require('os').type(),
+	exec = require('child_process').exec,
+	execFile = require('child_process').execFile,
+	path = require('path');
 
-function check(drive, callback)
-{
-	var result = {};
-	result.total = 0;
-	result.used = 0;
-	result.free = 0;
-	result.status = null;
+exports.check = async (drive) => {
+	const system = () => new Promise((resolve, reject) => {
 
-	if (!drive)
-	{
-		result.status = 'NOTFOUND';
-		var error = new Error('Necessary parameter absent');
+		let result = {};
+		result.total = 0;
+		result.used = 0;
+		result.free = 0;
+		result.status = null;
 
-		return callback
-					? callback(error, result)
-					: console.error(error);
-	}
+		if (!drive) {
+			result.status = 'NOTFOUND';
+			var error = new Error('Necessary parameter absent');
 
-	if (osType === 'Windows_NT') //Windows
-	{
-
-		if(drive.length <= 3)
-			drive = drive.charAt(0);
-
-		execFile(path.join(__dirname, 'drivespace.exe'),["drive-"+ drive], function (error, stdout, stderr)
-		{
-			if (error)
-			{
-				result.status = 'STDERR';
+			throw {
+				error: error,
+				result: result
 			}
-			else
-			{
-				var disk_info = stdout.trim().split(',');
+		}
 
-				result.total = disk_info[0];
-				result.free = disk_info[1];
-				result.used = result.total - result.free;
-				result.status = disk_info[2];
+		console.log(drive, osType)
+		//Windows
+		if (osType === 'Windows_NT') {
 
-				if (result.status === 'NOTFOUND')
-				{
-					error = new Error('Drive not found');
-				}
+			if (drive.length <= 3)
+				drive = drive.charAt(0);
 
-			}
-
-			callback ? callback(error, result)
-						 : console.error(stderr);
-		});
-	}
-	else
-	{
-		exec("df -k '" + drive.replace(/'/g,"'\\''") + "'", function(error, stdout, stderr)
-		{
-			if (error)
-			{
-				if (stderr.indexOf("No such file or directory") != -1)
-				{
-					result.status = 'NOTFOUND';
-				}
-				else
-				{
+			execFile(path.join(__dirname, 'drivespace.exe'), ["drive-" + drive], function (error, stdout, stderr) {
+				if (error) {
 					result.status = 'STDERR';
 				}
+				else {
+					var disk_info = stdout.trim().split(',');
 
-				callback ? callback(error, result)
-						 : console.error(stderr);
+					result.total = disk_info[0];
+					result.free = disk_info[1];
+					result.used = result.total - result.free;
+					result.status = disk_info[2];
+
+					if (result.status === 'NOTFOUND') {
+						error = new Error('Drive not found');
+					}
+
+				}
+
+				if (error) {
+					throw error;
+					return;
+				}
+
+				return resolve({
+					"total": disk_info[1] * 1024,
+					"used": disk_info[2] * 1024,
+					"free": disk_info[3] * 1024,
+					'status': 'READY'
+				});
+			});
+		};
+
+
+		exec("df -k '" + drive.replace(/'/g, "'\\''") + "'", (error, stdout, stderr) => {
+			if (error) {
+				let erro = JSON.stringify(error);
+
+				result['status'] = stderr.indexOf("No such file or directory") !== -1 ? 'NOTFOUND' : 'STDERR'
+
+				return reject({ erro, result });
 			}
-			else
-			{
-				var lines = stdout.trim().split("\n");
 
-				var str_disk_info = lines[lines.length - 1].replace( /[\s\n\r]+/g,' ');
-				var disk_info = str_disk_info.split(' ');
+			let lines = stdout.trim().split("\n"),
+				str_disk_info = lines[lines.length - 1].replace(/[\s\n\r]+/g, ' '),
+				disk_info = str_disk_info.split(' ');
 
-				result.total = disk_info[1] * 1024;
-				result.used = disk_info[2] * 1024;
-				result.free = disk_info[3] * 1024;
-				result.status = 'READY';
-
-				callback && callback(null, result);
-			}
+			return resolve({
+				"total": disk_info[1] * 1024,
+				"used": disk_info[2] * 1024,
+				"free": disk_info[3] * 1024,
+				'status': 'READY'
+			});
 		});
-	}
-}
 
-// Export public API
-module.exports = {
-	check: check,
-};
+	});
+
+	return await system().then((result) => {
+		console.log(result)
+		return result;
+	}).catch((err) => {
+		throw err;
+	})
+
+}
