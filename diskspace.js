@@ -4,7 +4,7 @@ const osType = require('os').type(),
 	execFile = require('child_process').execFile,
 	path = require('path');
 
-exports.check = async (drive) => {
+const check = async (drive) => {
 	const system = () => new Promise((resolve, reject) => {
 
 		let result = {};
@@ -23,42 +23,35 @@ exports.check = async (drive) => {
 			}
 		}
 
-		console.log(drive, osType)
 		//Windows
 		if (osType === 'Windows_NT') {
-
 			if (drive.length <= 3)
-				drive = drive.charAt(0);
-
-			execFile(path.join(__dirname, 'drivespace.exe'), ["drive-" + drive], function (error, stdout, stderr) {
+			drive = drive.charAt(0);
+			
+			return execFile(path.join(__dirname, 'drivespace.exe'), ["drive-" + drive], function (error, stdout, stderr) {
+				let disk_info = stdout.trim().split(',');	
 				if (error) {
 					result.status = 'STDERR';
+					return reject(result);
 				}
-				else {
-					var disk_info = stdout.trim().split(',');
-
-					result.total = disk_info[0];
-					result.free = disk_info[1];
-					result.used = result.total - result.free;
-					result.status = disk_info[2];
-
-					if (result.status === 'NOTFOUND') {
-						error = new Error('Drive not found');
-					}
-
+				
+					
+				result.status = disk_info[2];
+				
+				if (result.status === 'NOTFOUND') {
+					console.log(disk_info)
+					result.status  = 'Drive not found';
+					return reject(result);
 				}
 
-				if (error) {
-					throw error;
-					return;
-				}
+				result.total = disk_info[0];
+				result.free = disk_info[1];
+				result.used = result.total - result.free;
+				result.status = disk_info[2];
 
-				return resolve({
-					"total": disk_info[1] * 1024,
-					"used": disk_info[2] * 1024,
-					"free": disk_info[3] * 1024,
-					'status': 'READY'
-				});
+				return resolve(result)
+				
+
 			});
 		};
 
@@ -83,14 +76,22 @@ exports.check = async (drive) => {
 				'status': 'READY'
 			});
 		});
-
+		console.log(res)
 	});
 
 	return await system().then((result) => {
-		console.log(result)
 		return result;
 	}).catch((err) => {
 		throw err;
 	})
 
 }
+
+check('c:').then((result) => {
+	console.log('Total: ' + result.total);
+	console.log('Used: ' + result.used);
+	console.log('Free: ' + result.free);
+	console.log('Status: ' + result.status);
+}).catch((err) => {
+	console.log('errr', err.result);
+})
