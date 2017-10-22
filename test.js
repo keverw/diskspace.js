@@ -1,5 +1,5 @@
 //use just diskspace if installed via NPM
-const { check } = require('./diskspace.js'),
+const diskspace = require('./diskspace.js'),
 	os = require('os');
 let drive_letter = null;
 
@@ -13,21 +13,11 @@ if (os.type() == 'Windows_NT') {
 	drive_letter = null;
 }
 
-check('/').then((result) => {
+diskspace.check('/').then((result) => {
 	console.log('Total: ' + result.total);
 	console.log('Used: ' + result.used);
 	console.log('Free: ' + result.free);
 	console.log('Status: ' + result.status);
 }).catch((err) => {
-	console.log('errr', err);
+	console.log('errr', err.result);
 })
-
-
-// check(drive_letter, function (err, result)
-// {
-//     console.log('err: ' + result.err);
-// 	console.log('Total: ' + result.total);
-// 	console.log('Used: ' + result.used);
-// 	console.log('Free: ' + result.free);
-// 	console.log('Status: ' + result.status);
-// });

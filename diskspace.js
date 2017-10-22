@@ -4,7 +4,26 @@ const osType = require('os').type(),
 	execFile = require('child_process').execFile,
 	path = require('path');
 
-const check = async (drive) => {
+/**
+* @description returns an object in a promiser.
+* @async
+* @function check
+* @param {string} drive - driver you want to have information
+* @returns {Promise.<check>} 
+* @example
+*	diskspace.check('/').then((result) => {
+*		console.log('Total: ' + result.total);
+*		console.log('Used: ' + result.used);
+*		console.log('Free: ' + result.free);
+*		console.log('Status: ' + result.status);
+*	}).catch((err) => {
+*		console.log('errr', err.result);
+*	})
+*
+* @throws Will throw an error if the argument is null.
+*
+*/
+exports.check = async (drive) => {
 	const system = () => new Promise((resolve, reject) => {
 
 		let result = {};
@@ -26,21 +45,20 @@ const check = async (drive) => {
 		//Windows
 		if (osType === 'Windows_NT') {
 			if (drive.length <= 3)
-			drive = drive.charAt(0);
-			
+				drive = drive.charAt(0);
+
 			return execFile(path.join(__dirname, 'drivespace.exe'), ["drive-" + drive], function (error, stdout, stderr) {
-				let disk_info = stdout.trim().split(',');	
+				let disk_info = stdout.trim().split(',');
 				if (error) {
 					result.status = 'STDERR';
 					return reject(result);
 				}
-				
-					
+
+
 				result.status = disk_info[2];
-				
+
 				if (result.status === 'NOTFOUND') {
-					console.log(disk_info)
-					result.status  = 'Drive not found';
+					result.status = 'Drive not found';
 					return reject(result);
 				}
 
@@ -50,7 +68,7 @@ const check = async (drive) => {
 				result.status = disk_info[2];
 
 				return resolve(result)
-				
+
 
 			});
 		};
@@ -76,7 +94,6 @@ const check = async (drive) => {
 				'status': 'READY'
 			});
 		});
-		console.log(res)
 	});
 
 	return await system().then((result) => {
@@ -86,12 +103,3 @@ const check = async (drive) => {
 	})
 
 }
-
-check('c:').then((result) => {
-	console.log('Total: ' + result.total);
-	console.log('Used: ' + result.used);
-	console.log('Free: ' + result.free);
-	console.log('Status: ' + result.status);
-}).catch((err) => {
-	console.log('errr', err.result);
-})
