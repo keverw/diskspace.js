@@ -1,6 +1,6 @@
 [![build status](https://secure.travis-ci.org/keverw/diskspace.js.png)](http://travis-ci.org/keverw/diskspace.js)
 
-# diskspace.js 2.0.0
+# diskspace.js 3.0.0
 This is a simple module for Node.js to check disk space usage in bytes on both *nix and Windows systems.
 
 If you are using on Windows, This also depends on a console application for Windows called [DriveSpace](https://github.com/keverw/drivespace) written in C# and requires .NET Framework 3.5 when using this on a Windows system. This is included in the NPM package, but you can look at the DriveSpace code also if you wish.
@@ -16,10 +16,11 @@ To set up diskspace.js on your Node.js server use npm.
 ## Example Usage
 ```
 var diskspace = require('diskspace');
-diskspace.check('C', function (err, result)
-{
+diskspace.check('/').then((result) => {
 	Your code here
-});
+}).catch((err) => {
+	console.log('errr', err.result);
+})
 ```
 On Windows you change C to the drive letter you want to check. On Linux you use the mount path eg `/`.
 
