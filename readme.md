@@ -1,4 +1,4 @@
-[![build status](https://secure.travis-ci.org/keverw/diskspace.js.png)](http://travis-ci.org/keverw/diskspace.js)
+[![build status](https://secure.travis-ci.org/keverw/diskspace.js.svg)](http://travis-ci.org/keverw/diskspace.js)
 
 # diskspace.js 2.0.0
 This is a simple module for Node.js to check disk space usage in bytes on both *nix and Windows systems.
