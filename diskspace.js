@@ -38,8 +38,8 @@ function check(drive, callback)
 			{
 				var disk_info = stdout.trim().split(',');
 
-				result.total = disk_info[0];
-				result.free = disk_info[1];
+				result.total = Number(disk_info[0]);
+				result.free = Number(disk_info[1]);
 				result.used = result.total - result.free;
 				result.status = disk_info[2];
 
